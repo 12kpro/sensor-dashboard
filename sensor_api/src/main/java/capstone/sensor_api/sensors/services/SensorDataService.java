@@ -1,14 +1,8 @@
 package capstone.sensor_api.sensors.services;
 
-import capstone.sensor_api.exceptions.BadRequestException;
 import capstone.sensor_api.exceptions.NotFoundException;
-import capstone.sensor_api.sensors.Sensor;
 import capstone.sensor_api.sensors.SensorData;
-import capstone.sensor_api.sensors.Um;
-import capstone.sensor_api.sensors.dto.SensorCreateDto;
-import capstone.sensor_api.sensors.dto.SensorDataCreateDto;
 import capstone.sensor_api.sensors.repository.SensorDataRepository;
-import capstone.sensor_api.sensors.repository.SensorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,31 +17,17 @@ import java.util.UUID;
 public class SensorDataService {
     @Autowired
     SensorDataRepository sensorDataRepository;
-    @Autowired
-    SensorService sensorService;
-    public SensorData create(SensorDataCreateDto sd) {
-        Sensor s = sensorService.findById(sd.getSensor());
 
+    public SensorData create(SensorData sd) {
         SensorData newSensorData = new SensorData();
-        newSensorData.setSensor(s);
+        newSensorData.setSensor(sd.getSensor());
         newSensorData.setValue(sd.getValue());
         newSensorData.setTime(sd.getTime());
-        //TODO implementare con observer e proxy
-        if(sd.getValue() > s.getAlarmValue()){
-            log.error("Il valore rilevato ha superato la soglia di allarme");
-        }
+
         return sensorDataRepository.save(newSensorData);
     }
 
-    public Page<SensorData> find(int page, int size, String sortBy) {
-        if (size < 0)
-            size = 10;
-        if (size > 100)
-            size = 100;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        return sensorDataRepository.findAll(pageable);
-    }
     public Page<SensorData> findBySensor_Id(UUID id,int page, int size, String sortBy) {
         if (size < 0)
             size = 10;
@@ -74,6 +54,14 @@ public class SensorDataService {
 //        SensorData found = this.findById(id);
 //        sensorDataRepository.delete(found);
 //    }
-
+//public Page<SensorData> find(int page, int size, String sortBy) {
+//    if (size < 0)
+//        size = 10;
+//    if (size > 100)
+//        size = 100;
+//    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+//
+//    return sensorDataRepository.findAll(pageable);
+//}
 
 }

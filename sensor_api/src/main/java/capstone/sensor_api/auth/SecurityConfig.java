@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Autowired
     CorsFilter corsFilter;
+    //TODO attivare le CORS
 
 //    @Bean
 //    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

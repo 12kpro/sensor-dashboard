@@ -5,6 +5,8 @@ import capstone.sensor_api.exceptions.NotFoundException;
 import capstone.sensor_api.sensors.Sensor;
 import capstone.sensor_api.sensors.Um;
 import capstone.sensor_api.sensors.dto.SensorCreateDto;
+
+import capstone.sensor_api.sensors.proxy.ControlProcess;
 import capstone.sensor_api.sensors.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,21 +19,27 @@ import java.util.UUID;
 
 @Service
 public class SensorService {
+
+
     @Autowired
     SensorRepository sensorRepository;
     @Autowired
     UmService umService;
+    @Autowired
+    ControlProcess process;
     public Sensor create(SensorCreateDto s) {
         sensorRepository.findByNameIgnoreCase(s.getName()).ifPresent(user -> {
-            throw new BadRequestException("Sensor " + s + " già in registrato!");
+            throw new BadRequestException("Sensor " + s.getName() + " già in registrato!");
         });
         Um u = umService.findById(s.getUm());
         Sensor newSensor = new Sensor();
         newSensor.setName(s.getName());
         newSensor.setLat(s.getLat());
         newSensor.setLon(s.getLon());
-        newSensor.setAlarmValue(s.getAlarmValue());
+        newSensor.setAlertValue(s.getAlertValue());
+        newSensor.setAlertCondition(s.getAlertCondition());
         newSensor.setUm(u);
+        process.addSensor(newSensor);
         return sensorRepository.save(newSensor);
     }
     public Page<Sensor> find(int page, int size, String sortBy) {
@@ -43,22 +51,27 @@ public class SensorService {
 
         return sensorRepository.findAll(pageable);
     }
+
     public Sensor findById(UUID id) throws NotFoundException {
         return sensorRepository.findById(id).orElseThrow(() -> new NotFoundException("Sensor con Id:" + id + "non trovato!!"));
     }
     public Sensor findByIdAndUpdate(UUID id, SensorCreateDto s) throws NotFoundException {
         Sensor found = this.findById(id);
+        process.rmSensor(found);
         Um u = umService.findById(s.getUm());
         found.setId(id);
         found.setName(s.getName());
         found.setLat(s.getLat());
         found.setLon(s.getLon());
-        found.setAlarmValue(s.getAlarmValue());
+        found.setAlertValue(s.getAlertValue());
+        found.setAlertCondition(s.getAlertCondition());
         found.setUm(u);
+        process.addSensor(found);
         return sensorRepository.save(found);
     }
     public void findByIdAndDelete(UUID id) throws NotFoundException {
         Sensor found = this.findById(id);
+        process.rmSensor(found);
         sensorRepository.delete(found);
     }
 }

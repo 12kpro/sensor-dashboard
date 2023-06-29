@@ -10,28 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
+//TODO testare il controller dei sensori e rimuovere
 @RestController
 @RequestMapping("/sensorsdata")
 public class SensorDataController {
     @Autowired
     private SensorDataService sensorDataService;
 
-    @GetMapping("")
-    public Page<SensorData> getSensorsData(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(defaultValue = "id") String sortBy) {
-        return sensorDataService.find(page, size, sortBy);
-    }
     @GetMapping("/{id}")
     public Page<SensorData> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
                                     @RequestParam(defaultValue = "id") String sortBy) throws Exception {
         return sensorDataService.findBySensor_Id(id,page, size, sortBy);
-    }
-
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public SensorData saveSensorData(@RequestBody SensorDataCreateDto body) {
-        return sensorDataService.create(body);
     }
 
     @DeleteMapping("/{id}")
