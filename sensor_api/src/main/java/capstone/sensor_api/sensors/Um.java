@@ -1,5 +1,6 @@
 package capstone.sensor_api.sensors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,15 @@ public class Um {
     @GeneratedValue
     private UUID id;
     @NotNull
-    private String type;
-
+    private String unit;
+    @NotNull
+    private String description;
+    @JsonIgnore
     @OneToMany(mappedBy = "um", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Sensor> sensors = new ArrayList<>();
 
-    public Um(@NotNull String type) {
-        this.type = type;
+    public Um(@NotNull String unit, @NotNull String description) {
+        this.unit = unit;
+        this.description = description;
     }
 }

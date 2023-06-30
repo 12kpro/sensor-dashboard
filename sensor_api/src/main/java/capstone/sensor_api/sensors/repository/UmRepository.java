@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface UmRepository extends JpaRepository<Um, UUID> {
-    Optional<Um> findByTypeIgnoreCase(String type);
+    Optional<Um> findByUnitIgnoreCase(String unit);
 
 }

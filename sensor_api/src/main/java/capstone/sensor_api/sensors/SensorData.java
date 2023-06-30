@@ -1,5 +1,6 @@
 package capstone.sensor_api.sensors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class SensorData {
     private Double value;
     @NotNull
     @ManyToOne
+    @JsonIgnore
     private Sensor sensor;
 
     public SensorData(@NotNull LocalDateTime time, @NotNull Double value, @NotNull Sensor sensor) {

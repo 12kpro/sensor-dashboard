@@ -8,11 +8,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UmCreateDto {
-    @NotNull(message = "Il Type è obbligatorio")
-    @Size(min = 3, max = 30, message = "Type min 3 caratteri, massimo 30")
-    private String type;
+    @NotNull(message = "L'unità è obbligatoria")
+    @Size(min = 1, max = 15, message = "Type min 1 caratteri, massimo 15")
+    private String unit;
 
-    public UmCreateDto(@NotNull(message = "Il Type è obbligatorio") String type) {
-        this.type = type;
+    @NotNull(message = "La descrizione è obbligatorio")
+    @Size(min = 1, max = 30, message = "Descrizione min 1 caratteri, massimo 30")
+    private String description;
+
+    public UmCreateDto(@NotNull(message = "L'unità è obbligatoria") String unit, @NotNull(message = "La descrizione è obbligatorio") String description) {
+        this.unit = unit;
+        this.description = description;
     }
 }

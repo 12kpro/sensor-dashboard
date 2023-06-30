@@ -1,12 +1,10 @@
 package capstone.sensor_api.sensors;
 
-import capstone.sensor_api.exceptions.SensorFault;
 import capstone.sensor_api.utils.AlertConditions;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import capstone.sensor_api.sensors.interfaces.Observer;

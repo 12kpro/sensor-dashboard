@@ -22,12 +22,13 @@ public class UmService {
     UmRepository umRepository;
 
     public Um create(UmCreateDto u) {
-        umRepository.findByTypeIgnoreCase(u.getType()).ifPresent(user -> {
-            throw new BadRequestException("Um " + u.getType() + " già in uso!");
+        umRepository.findByUnitIgnoreCase(u.getUnit()).ifPresent(user -> {
+            throw new BadRequestException("Um " + u.getUnit() + " già in uso!");
         });
 
         Um newUm = new Um();
-        u.setType(u.getType());
+        newUm.setUnit(u.getUnit());
+        newUm.setDescription(u.getDescription());
         return umRepository.save(newUm);
     }
     public Page<Um> find(int page, int size, String sortBy) {
@@ -43,12 +44,13 @@ public class UmService {
         return umRepository.findById(id).orElseThrow(() -> new NotFoundException("Um con Id:" + id + "non trovato!!"));
     }
     public Um findByNomeIgnoreCase(String s) throws NotFoundException {
-        return umRepository.findByTypeIgnoreCase(s).orElseThrow(() -> new NotFoundException("Um con nome:" + s + "non trovato!!"));
+        return umRepository.findByUnitIgnoreCase(s).orElseThrow(() -> new NotFoundException("Um con nome:" + s + "non trovato!!"));
     }
     public Um findByIdAndUpdate(UUID id, UmCreateDto u) throws NotFoundException {
         Um found = this.findById(id);
         found.setId(id);
-        found.setType(u.getType());
+        found.setUnit(u.getUnit());
+        found.setDescription(u.getDescription());
         return umRepository.save(found);
     }
     public void findByIdAndDelete(UUID id) throws NotFoundException {

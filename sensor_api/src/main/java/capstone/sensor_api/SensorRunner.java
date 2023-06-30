@@ -8,6 +8,7 @@ import capstone.sensor_api.sensors.repository.UmRepository;
 import capstone.sensor_api.utils.AlertConditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +25,23 @@ import java.util.concurrent.TimeUnit;
 public class SensorRunner implements CommandLineRunner {
 
 
-    private String[] UmDefault = new String[]{"C°","m/s","Pa"};
+
+    List<Um> UmDefault = Arrays.asList(
+            new Um("C°","Temperatura"),
+            new Um("m/s","Velocità"),
+            new Um("Pa","Pressione")
+
+    );
     @Autowired
     SensorRepository sensorRepository;
     @Autowired
     UmRepository umRepository;
     @Autowired
     ControlProcess process;
-    //TODO aggiungere su env.properties
-    private Boolean loadDemoSensors = true;
-    private Boolean runFakeDatasensor = true;
+    @Value("${demo.sensors}")
+    private Boolean loadDemoSensors;
+    @Value("${demo.data}")
+    private Boolean runFakeDatasensor;
 
 //    @Value("${load.demo.sensors}")
 //    public void setloadDemoSensors(Boolean loadDemoSensors) {
@@ -44,8 +52,8 @@ public class SensorRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if(umRepository.count() == 0) {
-            for (String u : UmDefault) {
-                umRepository.save(new Um(u));
+            for (Um u : UmDefault) {
+                umRepository.save(u);
             }
         }
 
