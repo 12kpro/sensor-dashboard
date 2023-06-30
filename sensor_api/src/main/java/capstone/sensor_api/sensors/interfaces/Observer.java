@@ -4,4 +4,6 @@ import capstone.sensor_api.sensors.Sensor;
 
 public interface Observer {
     void update(Sensor sensor);
+
+    Object getId();
 }

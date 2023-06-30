@@ -7,6 +7,7 @@ import capstone.sensor_api.sensors.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -29,7 +30,7 @@ public class SensorController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Sensor saveSensor(@RequestBody SensorCreateDto body) {
+    public Sensor saveSensor(@RequestBody @Validated SensorCreateDto body) {
         return sensorService.create(body);
     }
 

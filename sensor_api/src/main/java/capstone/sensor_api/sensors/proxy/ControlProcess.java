@@ -3,7 +3,6 @@ package capstone.sensor_api.sensors.proxy;
 import capstone.sensor_api.sensors.Sensor;
 
 import capstone.sensor_api.sensors.SensorData;
-import capstone.sensor_api.sensors.dto.SensorDataCreateDto;
 import capstone.sensor_api.sensors.interfaces.Observer;
 import capstone.sensor_api.sensors.services.SensorDataService;
 
@@ -15,10 +14,12 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Component
 public class ControlProcess implements Observer {
+    private UUID id = UUID.randomUUID();
     private List<Sensor> sensors = new ArrayList<>();
     private ControlCenterProxy proxy;
     @Autowired
@@ -32,7 +33,7 @@ public class ControlProcess implements Observer {
         sensor.attach(this);
     }
     public void rmSensor(Sensor sensor) {
-        sensors.remove(sensor);
+        sensors.removeIf(s -> s.getId().equals(sensor.getId()));
         sensor.deAttach(this);
     }
     public List<Sensor> getSensors() {
@@ -41,16 +42,20 @@ public class ControlProcess implements Observer {
 
     @Override
     public void update(Sensor sensor) {
-        log.info("Update sensor");
-        if (sensorDataService == null) {
-            log.error("sensorDataService is null");
-        } else {
             SensorData newData = new SensorData(LocalDateTime.now(),sensor.getCurrentValue(),sensor);
             sensorDataService.create(newData);
             proxy.sendMessage(sensor);
-        }
-//        SensorDataCreateDto newData = new SensorDataCreateDto(LocalDateTime.now(),sensor.getCurrentValue(),sensor.getId());
-//        sensorDataService.create(newData);
-//        proxy.sendMessage(sensor);
+
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "ControlProcess{" +
+                "id=" + id +
+                '}';
     }
 }

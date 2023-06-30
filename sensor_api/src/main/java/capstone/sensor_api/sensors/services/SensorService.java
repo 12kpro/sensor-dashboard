@@ -8,6 +8,7 @@ import capstone.sensor_api.sensors.dto.SensorCreateDto;
 
 import capstone.sensor_api.sensors.proxy.ControlProcess;
 import capstone.sensor_api.sensors.repository.SensorRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
+@Slf4j
 @Service
 public class SensorService {
 
@@ -34,13 +35,18 @@ public class SensorService {
         Um u = umService.findById(s.getUm());
         Sensor newSensor = new Sensor();
         newSensor.setName(s.getName());
+        newSensor.setVisible(s.getVisible());
         newSensor.setLat(s.getLat());
         newSensor.setLon(s.getLon());
         newSensor.setAlertValue(s.getAlertValue());
         newSensor.setAlertCondition(s.getAlertCondition());
+        newSensor.setRangeMin(s.getRangeMin());
+        newSensor.setRangeMax(s.getRangeMax());
         newSensor.setUm(u);
-        process.addSensor(newSensor);
-        return sensorRepository.save(newSensor);
+        Sensor cs = sensorRepository.save(newSensor);
+        process.addSensor(cs);
+        //checkSensors("CREATE ADD");
+        return cs;
     }
     public Page<Sensor> find(int page, int size, String sortBy) {
         if (size < 0)
@@ -58,20 +64,34 @@ public class SensorService {
     public Sensor findByIdAndUpdate(UUID id, SensorCreateDto s) throws NotFoundException {
         Sensor found = this.findById(id);
         process.rmSensor(found);
+        //checkSensors("UPDATE REMOVE");
         Um u = umService.findById(s.getUm());
         found.setId(id);
         found.setName(s.getName());
+        found.setVisible(s.getVisible());
         found.setLat(s.getLat());
         found.setLon(s.getLon());
         found.setAlertValue(s.getAlertValue());
         found.setAlertCondition(s.getAlertCondition());
+        found.setRangeMin(s.getRangeMin());
+        found.setRangeMax(s.getRangeMax());
         found.setUm(u);
+        Sensor us = sensorRepository.save(found);
         process.addSensor(found);
-        return sensorRepository.save(found);
+        //checkSensors("UPDATE ADD");
+        return us;
     }
     public void findByIdAndDelete(UUID id) throws NotFoundException {
         Sensor found = this.findById(id);
         process.rmSensor(found);
+        //checkSensors("DELETE");
         sensorRepository.delete(found);
+    }
+    private void checkSensors (String action){
+        log.info("On: " + action);
+        for (Sensor s : process.getSensors()) {
+            log.info(s.toString());
+        }
+        log.info("*************************");
     }
 }

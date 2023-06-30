@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class SensorRunner implements CommandLineRunner {
 
-    private Boolean loadDemoSensors = true;
+
     private String[] UmDefault = new String[]{"C°","m/s","Pa"};
     @Autowired
     SensorRepository sensorRepository;
@@ -32,6 +32,9 @@ public class SensorRunner implements CommandLineRunner {
     @Autowired
     ControlProcess process;
     //TODO aggiungere su env.properties
+    private Boolean loadDemoSensors = true;
+    private Boolean runFakeDatasensor = true;
+
 //    @Value("${load.demo.sensors}")
 //    public void setloadDemoSensors(Boolean loadDemoSensors) {
 //        this.loadDemoSensors = loadDemoSensors;
@@ -68,15 +71,23 @@ public class SensorRunner implements CommandLineRunner {
                 process.addSensor(s);
             }
         }
-        List<Sensor> observedSensor = process.getSensors();
-        Runnable task = () -> {
-            Random rand = new Random();
-            Sensor s = observedSensor.get(rand.nextInt(observedSensor.size()));   //savedSensor.get(rand.nextInt(savedSensor.size()));
-            s.setCurrentValue(s.getRangeMin() + (s.getRangeMax() - s.getRangeMin()) * rand.nextDouble());
-        };
 
-        executor.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
+        if(runFakeDatasensor) {
 
+
+            Runnable task = () -> {
+                List<Sensor> observedSensor = process.getSensors();
+
+//                for (Sensor s : observedSensor) {
+//                    log.info(s.toString());
+//                }
+                Random rand = new Random();
+                Sensor s = observedSensor.get(rand.nextInt(observedSensor.size()));   //savedSensor.get(rand.nextInt(savedSensor.size()));
+                s.setCurrentValue(s.getRangeMin() + (s.getRangeMax() - s.getRangeMin()) * rand.nextDouble());
+            };
+
+            executor.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
+        }
 
     }
 

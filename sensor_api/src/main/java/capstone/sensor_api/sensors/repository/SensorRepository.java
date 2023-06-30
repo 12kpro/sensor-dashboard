@@ -11,4 +11,5 @@ public interface SensorRepository extends JpaRepository<Sensor, UUID> {
     Optional<Sensor> findByNameIgnoreCase(String name);
 
 
+
 }

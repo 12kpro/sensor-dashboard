@@ -2,6 +2,7 @@ package capstone.sensor_api.sensors;
 
 import capstone.sensor_api.exceptions.SensorFault;
 import capstone.sensor_api.utils.AlertConditions;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.*;
 @Entity
 @Table(name = "sensors")
 @Getter
-@Setter
 @NoArgsConstructor
 @Slf4j
 public class Sensor {
@@ -25,9 +25,9 @@ public class Sensor {
     private String name;
     private Boolean visible;
     @NotNull
-    private double lat;
+    private Double lat;
     @NotNull
-    private double lon;
+    private Double lon;
     @NotNull
     @Column(columnDefinition = "numeric(10,2)")
     private Double alertValue;
@@ -40,17 +40,21 @@ public class Sensor {
     @NotNull
     private AlertConditions alertCondition;
     @ManyToOne
+    @JsonIgnore
     private Um um;
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Collection<SensorData> sensorDatas = new ArrayList<>();
 
     @Transient
+    @JsonIgnore
     private Double currentValue;
 
     @Transient
+    @JsonIgnore
     private List<Observer> observers = new ArrayList<>();
 
-    public Sensor(@NotNull String name, Boolean visible, @NotNull double lat, @NotNull double lon, @NotNull Double alertValue, @NotNull Double rangeMin, @NotNull Double rangeMax, @NotNull AlertConditions alertCondition, Um um) {
+    public Sensor(@NotNull String name, Boolean visible, @NotNull Double lat, @NotNull Double lon, @NotNull Double alertValue, @NotNull Double rangeMin, @NotNull Double rangeMax, @NotNull AlertConditions alertCondition, Um um) {
         this.name = name;
         this.visible = visible;
         this.lat = lat;
@@ -62,6 +66,10 @@ public class Sensor {
         this.um = um;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void setName(@NotNull String name) {
         this.name = name;
     }
@@ -70,11 +78,11 @@ public class Sensor {
         this.visible = visible;
     }
 
-    public void setLat(@NotNull Long lat) {
+    public void setLat(@NotNull Double lat) {
         this.lat = lat;
     }
 
-    public void setLon(@NotNull Long lon) {
+    public void setLon(@NotNull Double lon) {
         this.lon = lon;
     }
 
@@ -90,6 +98,14 @@ public class Sensor {
         this.alertCondition = alertCondition;
     }
 
+    public void setRangeMin(@NotNull Double rangeMin) {
+        this.rangeMin = rangeMin;
+    }
+
+    public void setRangeMax(@NotNull Double rangeMax) {
+        this.rangeMax = rangeMax;
+    }
+
     public void setCurrentValue(Double currentValue){
         this.currentValue = currentValue;
         notifyObservers();
@@ -103,6 +119,15 @@ public class Sensor {
         observers.add(observer);
     }
     public void deAttach(Observer observer) {
-        observers.remove(observer);
+        observers.removeIf(o -> o.getId().equals(observer.getId()));
+    }
+
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", currentValue=" + currentValue +
+                '}';
     }
 }

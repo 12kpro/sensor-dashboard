@@ -9,28 +9,28 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//@Configuration
+@Configuration
 //@EnableWebSecurity
 public class SecurityConfig {
     @Autowired
     CorsFilter corsFilter;
     //TODO attivare le CORS
 
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        //http.cors(c -> c.disable());
-//
-//        http.csrf(c -> c.disable());
-//
-//        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
-//        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
-//
-//        //http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//
-//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//        return http.build();
-//    }
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors(c -> c.disable());
+
+        http.csrf(c -> c.disable());
+        http.authorizeRequests().anyRequest().permitAll();
+        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/sensors/**").permitAll());
+        //http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
+
+        //http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        //http.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
+    }
 }

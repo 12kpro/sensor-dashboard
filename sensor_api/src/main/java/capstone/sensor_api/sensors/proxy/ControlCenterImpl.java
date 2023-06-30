@@ -19,7 +19,7 @@ public class ControlCenterImpl implements ControlCenter {
                 "&lat=" + sensor.getLat() +
                 "&lon=" + sensor.getLon() +
                 "&smokelevel=" + sensor.getCurrentValue();
-        log.error(url);
+        //log.error(url);
     }
 
     public boolean isAlarmSent() {
