@@ -38,7 +38,6 @@ public class Sensor {
     @NotNull
     private AlertConditions alertCondition;
     @ManyToOne
-    @JsonIgnore
     private Um um;
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
