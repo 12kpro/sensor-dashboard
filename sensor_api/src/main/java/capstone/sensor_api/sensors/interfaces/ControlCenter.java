@@ -1,7 +1,8 @@
 package capstone.sensor_api.sensors.interfaces;
 
-import capstone.sensor_api.sensors.Sensor;
+import capstone.sensor_api.sensors.dto.SensorDataResponseDto;
+import capstone.sensor_api.sensors.entities.SensorData;
 
 public interface ControlCenter {
-    void sendMessage(Sensor sensor);
+    void sendSensorData(SensorDataResponseDto data);
 }

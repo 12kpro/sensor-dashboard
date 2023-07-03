@@ -1,7 +1,7 @@
 package capstone.sensor_api;
 
-import capstone.sensor_api.sensors.Sensor;
-import capstone.sensor_api.sensors.Um;
+import capstone.sensor_api.sensors.entities.Sensor;
+import capstone.sensor_api.sensors.entities.Um;
 import capstone.sensor_api.sensors.proxy.ControlProcess;
 import capstone.sensor_api.sensors.repository.SensorRepository;
 import capstone.sensor_api.sensors.repository.UmRepository;

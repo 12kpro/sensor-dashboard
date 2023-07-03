@@ -1,7 +1,7 @@
 package capstone.sensor_api.sensors.controllers;
 
 import capstone.sensor_api.exceptions.NotFoundException;
-import capstone.sensor_api.sensors.SensorData;
+import capstone.sensor_api.sensors.entities.SensorData;
 import capstone.sensor_api.sensors.dto.SensorDataResponseDto;
 import capstone.sensor_api.sensors.mapper.SensorDataMapper;
 import capstone.sensor_api.sensors.services.SensorDataService;

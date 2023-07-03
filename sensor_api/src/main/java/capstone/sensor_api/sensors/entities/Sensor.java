@@ -1,4 +1,4 @@
-package capstone.sensor_api.sensors;
+package capstone.sensor_api.sensors.entities;
 
 import capstone.sensor_api.utils.AlertConditions;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,9 +1,8 @@
 package capstone.fe_api.dataservice.dto;
 
 import capstone.fe_api.utils.AlertConditions;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
@@ -11,29 +10,20 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class SensorCreateDto {
 
-    @NotNull(message = "Il nome è obbligatorio")
-    @Size(min = 3, max = 30, message = "Nome min 3 caratteri, massimo 30")
     private String name;
-    @NotNull(message = "La visiblilità è obbligatoria")
     private Boolean visible;
-    @NotNull(message = "La latitudine è obbligatoria")
     private Double lat;
-    @NotNull(message = "Ia longitudine è obbligatoria")
     private Double lon;
-    @NotNull(message = "La soglia di allarme è obbligatoria")
     private Double alertValue;
-    @NotNull(message = "La soglia minima di funzionamento è obbligatoria")
     private Double rangeMin;
-    @NotNull(message = "La soglia massima di funzionamento è obbligatoria")
     private Double rangeMax;
-    @NotNull(message = "La condizione è obbligatoria")
     private AlertConditions alertCondition;
-    @NotNull(message = "L' unità di misura è obbligatoria")
     private UUID um;
 
-    public SensorCreateDto(@NotNull(message = "Il nome è obbligatorio") String name, @NotNull(message = "La visiblilità è obbligatoria") Boolean visible, @NotNull(message = "La latitudine è obbligatoria") Double lat, @NotNull(message = "Ia longitudine è obbligatoria") Double lon, @NotNull(message = "La soglia di allarme è obbligatoria") Double alertValue, @NotNull(message = "La soglia minima di funzionamento è obbligatoria") Double rangeMin, @NotNull(message = "La soglia massima di funzionamento è obbligatoria") Double rangeMax, @NotNull(message = "La condizione è obbligatoria") AlertConditions alertCondition, @NotNull(message = "L' unità di misura è obbligatoria") UUID um) {
+    public SensorCreateDto(String name, Boolean visible, Double lat, Double lon, Double alertValue, Double rangeMin, Double rangeMax, AlertConditions alertCondition, UUID um) {
         this.name = name;
         this.visible = visible;
         this.lat = lat;

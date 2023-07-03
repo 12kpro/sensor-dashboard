@@ -1,7 +1,7 @@
 package capstone.sensor_api.sensors.controllers;
 
 import capstone.sensor_api.exceptions.NotFoundException;
-import capstone.sensor_api.sensors.Sensor;
+import capstone.sensor_api.sensors.entities.Sensor;
 import capstone.sensor_api.sensors.dto.SensorCreateDto;
 import capstone.sensor_api.sensors.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
-
+@Slf4j
 @RestController
-@RequestMapping("/sensors")
+@RequestMapping("/sensor")
 public class SensorController {
     @Autowired
     private SensorService sensorService;

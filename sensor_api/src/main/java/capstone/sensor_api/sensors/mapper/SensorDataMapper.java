@@ -1,6 +1,6 @@
 package capstone.sensor_api.sensors.mapper;
 
-import capstone.sensor_api.sensors.SensorData;
+import capstone.sensor_api.sensors.entities.SensorData;
 import capstone.sensor_api.sensors.dto.SensorDataResponseDto;
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,10 @@
 package capstone.sensor_api.sensors.proxy;
 
-import capstone.sensor_api.sensors.Sensor;
+import capstone.sensor_api.sensors.entities.Sensor;
 
-import capstone.sensor_api.sensors.SensorData;
+import capstone.sensor_api.sensors.entities.SensorData;
 import capstone.sensor_api.sensors.interfaces.Observer;
+import capstone.sensor_api.sensors.mapper.SensorDataMapper;
 import capstone.sensor_api.sensors.services.SensorDataService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public class ControlProcess implements Observer {
     private ControlCenterProxy proxy;
     @Autowired
     SensorDataService sensorDataService;
+    @Autowired
+    private SensorDataMapper sensorDataMapper;
     public ControlProcess(ControlCenterProxy proxy) {
         this.proxy = proxy;
     }
@@ -44,7 +47,7 @@ public class ControlProcess implements Observer {
     public void update(Sensor sensor) {
             SensorData newData = new SensorData(LocalDateTime.now(),sensor.getCurrentValue(),sensor);
             sensorDataService.create(newData);
-            proxy.sendMessage(sensor);
+            proxy.sendSensorData(sensorDataMapper.toDTO(newData));
 
     }
 

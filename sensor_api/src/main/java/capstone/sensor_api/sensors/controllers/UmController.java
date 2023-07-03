@@ -1,7 +1,7 @@
 package capstone.sensor_api.sensors.controllers;
 
 import capstone.sensor_api.exceptions.NotFoundException;
-import capstone.sensor_api.sensors.Um;
+import capstone.sensor_api.sensors.entities.Um;
 import capstone.sensor_api.sensors.dto.UmCreateDto;
 import capstone.sensor_api.sensors.services.UmService;
 import org.springframework.beans.factory.annotation.Autowired;

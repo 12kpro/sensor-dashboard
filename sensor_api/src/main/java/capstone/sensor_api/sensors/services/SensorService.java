@@ -2,8 +2,8 @@ package capstone.sensor_api.sensors.services;
 
 import capstone.sensor_api.exceptions.BadRequestException;
 import capstone.sensor_api.exceptions.NotFoundException;
-import capstone.sensor_api.sensors.Sensor;
-import capstone.sensor_api.sensors.Um;
+import capstone.sensor_api.sensors.entities.Sensor;
+import capstone.sensor_api.sensors.entities.Um;
 import capstone.sensor_api.sensors.dto.SensorCreateDto;
 
 import capstone.sensor_api.sensors.proxy.ControlProcess;

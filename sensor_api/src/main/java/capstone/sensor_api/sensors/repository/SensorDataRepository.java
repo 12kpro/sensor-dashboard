@@ -1,11 +1,7 @@
 package capstone.sensor_api.sensors.repository;
 
-import capstone.sensor_api.sensors.Sensor;
-import capstone.sensor_api.sensors.SensorData;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import capstone.sensor_api.sensors.entities.SensorData;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;

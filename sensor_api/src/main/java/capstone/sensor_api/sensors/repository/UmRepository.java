@@ -1,6 +1,6 @@
 package capstone.sensor_api.sensors.repository;
 
-import capstone.sensor_api.sensors.Um;
+import capstone.sensor_api.sensors.entities.Um;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
