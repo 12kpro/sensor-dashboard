@@ -4,9 +4,12 @@ import capstone.sensor_api.exceptions.NotFoundException;
 import capstone.sensor_api.sensors.entities.Sensor;
 import capstone.sensor_api.sensors.dto.SensorCreateDto;
 import capstone.sensor_api.sensors.services.SensorService;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;

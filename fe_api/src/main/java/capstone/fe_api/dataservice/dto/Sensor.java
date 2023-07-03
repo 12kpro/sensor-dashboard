@@ -1,6 +1,7 @@
 package capstone.fe_api.dataservice.dto;
 
 import capstone.fe_api.utils.AlertConditions;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class Sensor {
     private Double rangeMin;
 
     private Double rangeMax;
-
+    @JsonProperty("alertCondition")
     private AlertConditions alertCondition;
     private Um um;
 

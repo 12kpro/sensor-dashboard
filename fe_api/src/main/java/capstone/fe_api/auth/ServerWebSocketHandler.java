@@ -38,7 +38,7 @@ public class ServerWebSocketHandler extends TextWebSocketHandler implements SubP
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String request = message.getPayload();
-        log.info("Server received: {}", request);
+        //log.info("Server received: {}", request);
         for (WebSocketSession s : sessions) {
             if (s.isOpen()) {
                 s.sendMessage(message);

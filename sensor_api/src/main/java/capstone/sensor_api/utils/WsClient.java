@@ -22,8 +22,7 @@ public class WsClient extends TextWebSocketHandler {
     private WebSocketSession clientSession;
 
     public WsClient () throws ExecutionException, InterruptedException {
-        StandardWebSocketClient webSocketClient = new StandardWebSocketClient();
-        this.clientSession = webSocketClient.doHandshake(this, new WebSocketHttpHeaders(), URI.create("ws://localhost:5080/sensorevent")).get();
+            connect();
     }
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -37,17 +36,21 @@ public class WsClient extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         log.info("Client connection closed: {}", status);
-        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            try {
-                this.clientSession = new StandardWebSocketClient().doHandshake(this, new WebSocketHttpHeaders(), URI.create("ws://localhost:5080/sensorevent")).get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }, 5, TimeUnit.SECONDS);
+        connect();
     }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         log.info("Client transport error: {}", exception.getMessage());
+    }
+
+    private void connect() {
+        StandardWebSocketClient webSocketClient = new StandardWebSocketClient();
+        try {
+            this.clientSession = webSocketClient.doHandshake(this, new WebSocketHttpHeaders(), URI.create("ws://localhost:5080/sensorevent")).get();
+        } catch (ExecutionException | InterruptedException e) {
+            log.error("Error: " + e.getCause().getMessage());
+            Executors.newSingleThreadScheduledExecutor().schedule(this::connect, 5, TimeUnit.SECONDS);
+        }
     }
 }
