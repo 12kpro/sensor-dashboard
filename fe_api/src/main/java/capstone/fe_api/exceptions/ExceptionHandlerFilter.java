@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 // Server per catch degli errori nei filter
-//@Component
+@Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
     @Autowired
     @Qualifier("handlerExceptionResolver")

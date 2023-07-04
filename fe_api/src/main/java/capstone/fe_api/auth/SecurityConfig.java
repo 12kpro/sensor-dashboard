@@ -22,28 +22,41 @@ import java.time.Duration;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
-//    @Autowired
-//    JWTAuthFilter jwtAuthFilter;
-//    @Autowired
-//    ExceptionHandlerFilter exceptionHandlerFilter;
-//
+    @Autowired
+    JWTAuthFilter jwtAuthFilter;
+    @Autowired
+    ExceptionHandlerFilter exceptionHandlerFilter;
+
     @Autowired
     HeadersInterceptor headersInterceptor;
     @Autowired
     RestTemplateErrorHandler restTemplateErrorHandler;
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //TODO Attivare cors per localhost porta 3000 (frontend) e porta 5081 (Backend service)
         http.cors(c -> c.disable());
         http.csrf(c -> c.disable());
 
-//        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
-//        http.authorizeHttpRequests(auth -> auth.requestMatchers("/utenti/**").authenticated());
-//        http.authorizeHttpRequests(auth -> auth.requestMatchers("/ruoli/**").authenticated());
-        http.authorizeRequests().anyRequest().permitAll();
-        //http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        //http.addFilterBefore(exceptionHandlerFilter, JWTAuthFilter.class);
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
+        //TODO permettere accesso a utente con permessi USER
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/sensorevent").permitAll());
+        //Ok impostato token per testare le API
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui/**").permitAll());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api-docs/**").permitAll());
+
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/roles/**").authenticated());
+
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/sensor/**").authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/um/**").authenticated());
+
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JWTAuthFilter.class);
+
+//        http.authorizeRequests().anyRequest().permitAll();
+
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

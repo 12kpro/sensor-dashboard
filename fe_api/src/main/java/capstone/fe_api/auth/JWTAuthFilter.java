@@ -5,8 +5,8 @@ package capstone.fe_api.auth;
 
 import capstone.fe_api.exceptions.NotFoundException;
 import capstone.fe_api.exceptions.UnauthorizedException;
-import capstone.fe_api.utenti.User;
-import capstone.fe_api.utenti.services.UtenteService;
+import capstone.fe_api.users.User;
+import capstone.fe_api.users.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,10 +21,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-//@Component
+@Component
 public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
-    UtenteService utenteService;
+    UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,7 +40,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         String username = JWTTools.extractSubject(accessToken);
         try {
-            User user = utenteService.findByUserName(username);
+            User user = userService.findByUserName(username);
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
                     user.getAuthorities());
@@ -53,7 +53,17 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     }
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return new AntPathMatcher().match("/auth/**", request.getServletPath());
+        String[] patterns = {"/auth/**", "/sensorevent", "/swagger-ui/**", "/api-docs/**"};
+        AntPathMatcher matcher = new AntPathMatcher();
+        boolean match = false;
+        for (String pattern : patterns) {
+            if (matcher.match(pattern, request.getServletPath())) {
+                match = true;
+                break;
+            }
+        }
+
+        return match;
     }
 
 }

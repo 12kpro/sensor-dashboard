@@ -1,6 +1,6 @@
-package capstone.fe_api.utenti.repositories;
+package capstone.fe_api.users.repositories;
 
-import capstone.fe_api.utenti.Role;
+import capstone.fe_api.users.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, UUID> {
-    Optional<Role> findByNome(String nome);
+    Optional<Role> findByName(String name);
 
 }

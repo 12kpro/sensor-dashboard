@@ -9,13 +9,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-//TODO da cancellare, non usata
-public class SensorDataMessageDto {
+public class SensorDataResponseDto {
     private LocalDateTime time;
     private Double value;
     private UUID sensorId;
 
-    public SensorDataMessageDto(LocalDateTime time, Double value, UUID sensorId) {
+    public SensorDataResponseDto(LocalDateTime time, Double value, UUID sensorId) {
         this.time = time;
         this.value = value;
         this.sensorId = sensorId;

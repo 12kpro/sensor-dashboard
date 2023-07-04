@@ -1,4 +1,4 @@
-package capstone.fe_api.utenti;
+package capstone.fe_api.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -15,39 +15,40 @@ import java.util.*;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "utenti")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id = UUID.randomUUID();
 
-    private String cognome;
+    private String surname;
     private String email;
-    private String nome;
+    private String name;
+    @JsonIgnore
     private String password;
     private String username;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "utenti_ruoli",
-            joinColumns = @JoinColumn(name = "utente_id"),
-            inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
 
     @JsonIgnore
-    private Set<Role> ruoli = new LinkedHashSet<>();
+    private Set<Role> roles = new LinkedHashSet<>();
 
-    public User(String cognome, String email, String nome, String password, String username) {
-        this.cognome = cognome;
+    public User(String surname, String email, String name, String password, String username) {
+        this.surname = surname;
         this.email = email;
-        this.nome = nome;
+        this.name = name;
         this.password = password;
         this.username = username;
     }
-
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : ruoli) {
-            authorities.add(new SimpleGrantedAuthority(role.getNome()));
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
     }

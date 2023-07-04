@@ -1,7 +1,7 @@
-package capstone.fe_api.utenti.repositories;
+package capstone.fe_api.users.repositories;
 
 
-import capstone.fe_api.utenti.User;
+import capstone.fe_api.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

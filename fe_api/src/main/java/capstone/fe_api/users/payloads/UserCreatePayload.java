@@ -1,4 +1,4 @@
-package capstone.fe_api.utenti.payloads;
+package capstone.fe_api.users.payloads;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -11,9 +11,9 @@ import lombok.Setter;
 public class UserCreatePayload {
     @NotNull(message = "Il nome è obbligatorio")
     @Size(min = 3, max = 30, message = "Nome min 3 caratteri, massimo 30")
-    String nome;
+    String name;
     @NotNull(message = "Il cognome è obbligatorio")
-    String cognome;
+    String surname;
     @NotNull(message = "Lo user name è obbligatorio")
     @Size(min = 3, max = 30, message = "Nome min 3 caratteri, massimo 30")
     String username;
@@ -22,13 +22,11 @@ public class UserCreatePayload {
     @NotNull(message = "La password è obbligatoria")
     String password;
 
-    public UserCreatePayload(@NotNull(message = "Il nome è obbligatorio") String nome, @NotNull(message = "Il cognome è obbligatorio") String cognome, @NotNull(message = "Lo user name è obbligatorio") String username, String email, @NotNull(message = "La password è obbligatoria") String password) {
-        this.nome = nome;
-        this.cognome = cognome;
+    public UserCreatePayload(@NotNull(message = "Il nome è obbligatorio") String name, @NotNull(message = "Il cognome è obbligatorio") String surname, @NotNull(message = "Lo user name è obbligatorio") String username, String email, @NotNull(message = "La password è obbligatoria") String password) {
+        this.name = name;
+        this.surname = surname;
         this.username = username;
         this.email = email;
         this.password = password;
-}
-
-
+    }
 }

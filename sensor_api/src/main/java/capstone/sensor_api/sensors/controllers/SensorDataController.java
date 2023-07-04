@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
+//TODO da rimuovere???
 @RestController
 @RequestMapping("/sensordata")
 public class SensorDataController {
@@ -20,15 +20,10 @@ public class SensorDataController {
     private SensorDataService sensorDataService;
     @Autowired
     private SensorDataMapper sensorDataMapper;
-    @GetMapping("/{id}")
-    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "7" ) int interval ) throws Exception {
-        LocalDateTime data = LocalDateTime.now();
-        List<SensorData> sd = sensorDataService.findBySensor_IddAndTimeGreaterThan(id,data.minusDays(interval));
-        return sensorDataMapper.toDTOs(sd);
-    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSensor(@PathVariable UUID id) throws NotFoundException {
+    public void deleteSensorData(@PathVariable UUID id) throws NotFoundException {
         sensorDataService.findBySensorIdAndDelete(id);
     }
 }

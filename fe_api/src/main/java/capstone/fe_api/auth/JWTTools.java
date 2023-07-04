@@ -3,7 +3,7 @@ package capstone.fe_api.auth;
 
 
 import capstone.fe_api.exceptions.UnauthorizedException;
-import capstone.fe_api.utenti.User;
+import capstone.fe_api.users.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

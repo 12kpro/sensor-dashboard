@@ -1,8 +1,12 @@
 package capstone.sensor_api.sensors.controllers;
 
 import capstone.sensor_api.exceptions.NotFoundException;
+import capstone.sensor_api.sensors.dto.SensorDataResponseDto;
 import capstone.sensor_api.sensors.entities.Sensor;
 import capstone.sensor_api.sensors.dto.SensorCreateDto;
+import capstone.sensor_api.sensors.entities.SensorData;
+import capstone.sensor_api.sensors.mapper.SensorDataMapper;
+import capstone.sensor_api.sensors.services.SensorDataService;
 import capstone.sensor_api.sensors.services.SensorService;
 
 import org.apache.catalina.connector.Response;
@@ -14,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 @Slf4j
 @RestController
@@ -21,6 +27,11 @@ import java.util.UUID;
 public class SensorController {
     @Autowired
     private SensorService sensorService;
+    @Autowired
+    private SensorDataService sensorDataService;
+
+    @Autowired
+    private SensorDataMapper sensorDataMapper;
 
     @GetMapping("")
     public Page<Sensor> getSensors(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
@@ -31,7 +42,12 @@ public class SensorController {
     public Sensor getSensor(@PathVariable UUID id) throws NotFoundException {
         return sensorService.findById(id);
     }
-
+    @GetMapping("/{id}/data")
+    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "7" ) int interval ) throws Exception {
+        LocalDateTime data = LocalDateTime.now();
+        List<SensorData> sd = sensorDataService.findBySensor_IddAndTimeGreaterThan(id,data.minusDays(interval));
+        return sensorDataMapper.toDTOs(sd);
+    }
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Sensor saveSensor(@RequestBody @Validated SensorCreateDto body) {

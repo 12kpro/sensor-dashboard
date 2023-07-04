@@ -1,9 +1,9 @@
 package capstone.fe_api;
 
-import capstone.fe_api.utenti.Role;
-import capstone.fe_api.utenti.User;
-import capstone.fe_api.utenti.repositories.RoleRepository;
-import capstone.fe_api.utenti.repositories.UserRepository;
+import capstone.fe_api.users.Role;
+import capstone.fe_api.users.User;
+import capstone.fe_api.users.repositories.RoleRepository;
+import capstone.fe_api.users.repositories.UserRepository;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ import java.util.Optional;
 @Component
 public class setupRunner implements CommandLineRunner {
     private Boolean firstRun;
-    private String nome;
-    private String cognome;
+    private String name;
+    private String surname;
     private String username;
     private String email;
     private String password;
 
-    private String[] ruoliDefault = new String[]{"USER","ADMIN"};
+    private String[] defaultRole = new String[]{"USER","ADMIN"};
 
 
     @Autowired
@@ -41,13 +41,13 @@ public class setupRunner implements CommandLineRunner {
     public void setFirstrun(Boolean firstrun) {
         this.firstRun = firstrun;
     }
-    @Value("${admin.nome}")
-    public void setAdminNome(String s) {
-        this.nome = s;
+    @Value("${admin.name}")
+    public void setAdminName(String s) {
+        this.name = s;
     }
-    @Value("${admin.cognome}")
-    public void setAdminCognome(String s) {
-        this.cognome = s;
+    @Value("${admin.surname}")
+    public void setAdminSurname(String s) {
+        this.surname = s;
     }
     @Value("${admin.username}")
     public void setAdminUserName(String s) {
@@ -73,13 +73,13 @@ public class setupRunner implements CommandLineRunner {
     public void firstUserCreate(){
         //TODO nick prende un valore inesistente nei file properties e env
         Optional<User> found = userRepository.findByEmail(email);
-        User admin = new User(cognome,email,nome,bcrypt.encode(password),username);
+        User admin = new User(surname,email,name,bcrypt.encode(password),username);
         log.info(username);
-        Optional<Role> ruolo = roleRepository.findByNome("ADMIN");
-        if (ruolo.isPresent() && !found.isPresent()){
-            log.info(ruolo.get().toString());
+        Optional<Role> role = roleRepository.findByName("ADMIN");
+        if (role.isPresent() && !found.isPresent()){
+            log.info(role.get().toString());
 
-            admin.getRuoli().add(ruolo.get());
+            admin.getRoles().add(role.get());
             log.info(admin.toString());
             userRepository.save(admin);
         }
@@ -87,8 +87,8 @@ public class setupRunner implements CommandLineRunner {
 
     public void loadDefault(){
         if(roleRepository.count() == 0) {
-            for (String ruolo : ruoliDefault) {
-                roleRepository.save(new Role(ruolo));
+            for (String role : defaultRole) {
+                roleRepository.save(new Role(role));
             }
         }
     }

@@ -1,4 +1,4 @@
-package capstone.fe_api.utenti;
+package capstone.fe_api.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name="ruoli")
+@Table(name="roles")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,25 +19,25 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String nome;
+    private String name;
 
     @ManyToMany
-    @JoinTable(name = "utenti_ruoli",
-            joinColumns = @JoinColumn(name = "ruolo_id"),
-            inverseJoinColumns = @JoinColumn(name = "utente_id"))
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
 
     @JsonIgnore
-    private Set<User> utenti = new LinkedHashSet<>();
+    private Set<User> users = new LinkedHashSet<>();
 
-    public Role(String nome) {
-        this.nome = nome;
+    public Role(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "Ruolo{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
+                ", nome='" + name + '\'' +
                 '}';
     }
 }

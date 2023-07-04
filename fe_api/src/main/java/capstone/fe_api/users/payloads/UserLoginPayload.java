@@ -1,4 +1,4 @@
-package capstone.fe_api.utenti.payloads;
+package capstone.fe_api.users.payloads;
 
 import lombok.Getter;
 

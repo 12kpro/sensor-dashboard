@@ -1,9 +1,9 @@
-package capstone.fe_api.utenti.services;
+package capstone.fe_api.users.services;
 
 import capstone.fe_api.exceptions.BadRequestException;
 import capstone.fe_api.exceptions.NotFoundException;
-import capstone.fe_api.utenti.repositories.RoleRepository;
-import capstone.fe_api.utenti.Role;
+import capstone.fe_api.users.repositories.RoleRepository;
+import capstone.fe_api.users.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class RuoloService {
+public class RoleService {
     @Autowired
     RoleRepository roleRepository;
-    public Role create(String r) {
-        roleRepository.findByNome(r).ifPresent(user -> {
-            throw new BadRequestException("Ruolo " + r + " già in uso!");
+    public Role create(Role r) {
+        roleRepository.findByName(r.getName()).ifPresent(user -> {
+            throw new BadRequestException("Ruolo " + r.getName().toUpperCase() + " già in uso!");
         });
-        Role newRole = new Role(r);
+        Role newRole = new Role(r.getName().toUpperCase());
         return roleRepository.save(newRole);
     }
     public Page<Role> find(int page, int size, String sortBy) {
@@ -37,12 +37,12 @@ public class RuoloService {
         return roleRepository.findById(id).orElseThrow(() -> new NotFoundException("Ruolo con Id:" + id + "non trovato!!"));
     }
     public Role findNome(String r) throws NotFoundException {
-        return roleRepository.findByNome(r).orElseThrow(() -> new NotFoundException("Ruolo con nome:" + r + "non trovato!!"));
+        return roleRepository.findByName(r).orElseThrow(() -> new NotFoundException("Ruolo con nome:" + r + "non trovato!!"));
     }
     public Role findByIdAndUpdate(UUID id, Role r) throws NotFoundException {
         Role found = this.findById(id);
         found.setId(id);
-        found.setNome(r.getNome());
+        found.setName(r.getName().toUpperCase());
         return roleRepository.save(found);
     }
     public void findByIdAndDelete(UUID id) throws NotFoundException {

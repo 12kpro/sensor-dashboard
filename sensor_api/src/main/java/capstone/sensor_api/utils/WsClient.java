@@ -30,7 +30,7 @@ public class WsClient extends TextWebSocketHandler {
     }
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
-        log.info("Server received and send message" + message.getPayload());
+        //log.info("Server received and send message" + message.getPayload());
     }
 
     @Override
@@ -43,8 +43,13 @@ public class WsClient extends TextWebSocketHandler {
     public void handleTransportError(WebSocketSession session, Throwable exception) {
         log.info("Client transport error: {}", exception.getMessage());
     }
-
+    //TODO quando si riconnette non invia messaggi , verificare e fixare il problema
     private void connect() {
+        //TODO implementare login con jwt token su /auth/loginWebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+        //headers.add("Authorization", "YOUR_AUTHORIZATION_HEADER_VALUE_HERE");
+        //webSocketClient.doHandshake(this, headers, URI.create("ws://localhost:5080/sensorevent")).get();
+        //implementare il recupero del token con restTemplate
+
         StandardWebSocketClient webSocketClient = new StandardWebSocketClient();
         try {
             this.clientSession = webSocketClient.doHandshake(this, new WebSocketHttpHeaders(), URI.create("ws://localhost:5080/sensorevent")).get();
