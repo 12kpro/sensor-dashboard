@@ -1,4 +1,4 @@
-package capstone.fe_api.auth;
+package capstone.fe_api.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -11,17 +11,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SwaggerConfiguration {
-
+public class SwaggerConfig {
+    //TODO correggere le info
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
-                .info(new Info().title("My REST API")
-                        .description("Some custom description of API.")
-                        .version("1.0").contact(new Contact().name("Sallo Szrajbman").email( "www.baeldung.com").url("salloszraj@gmail.com"))
-                        .license(new License().name("License of API")
-                                .url("API license URL")));
+                .info(new Info().title("Capstone API")
+//                        .description("Some custom description of API.")
+                        .version("1.0").contact(new Contact().name("Mauro Simoni").email( "mauro.simoni@gmal.com").url("12kpro.net")));
+//                        .license(new License().name("License of API").url("API license URL")));
     }
 
     private SecurityScheme createAPIKeyScheme() {

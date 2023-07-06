@@ -1,6 +1,7 @@
-package capstone.fe_api.auth;
+package capstone.fe_api.config;
 
 
+import capstone.fe_api.auth.JWTAuthFilter;
 import capstone.fe_api.exceptions.ExceptionHandlerFilter;
 import capstone.fe_api.exceptions.RestTemplateErrorHandler;
 import capstone.fe_api.utils.HeadersInterceptor;
@@ -17,8 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.time.Duration;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -36,9 +39,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //TODO Attivare cors per localhost porta 3000 (frontend) e porta 5081 (Backend service)
-        http.cors(c -> c.disable());
+        //http.cors(c -> c.disable());
         http.csrf(c -> c.disable());
-
+        http.cors(c -> c.configurationSource(request -> {
+            CorsConfiguration cors = new CorsConfiguration();
+            cors.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5081"));
+            cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            return cors;
+        }));
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
         //TODO permettere accesso a utente con permessi USER
         http.authorizeHttpRequests(auth -> auth.requestMatchers("/sensorevent").permitAll());
