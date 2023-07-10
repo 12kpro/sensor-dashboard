@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -19,12 +20,12 @@ const Navigation = () => {
     }
   }, []);
   return (
-    <header className="mb-3">
+    <header className="position-fixed vw-100">
       <nav className="navbar navbar-expand-lg">
         <div className="container-fluid px-5">
-          <a className="navbar-brand" href="#">
+          <Link className="navbar-brand" to="/">
             <img src="assets/images/netflix_logo.png" height="40px" />
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -37,29 +38,6 @@ const Navigation = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {/* <ul className="navbar-nav me-auto mb-2 mb-lg-0 link-light">
-              <li className="nav-item">
-                <a className="nav-link link-secondary" aria-current="page" href="index.html">
-                  Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link link-secondary" href="#">
-                  TV Shows
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link link-secondary" href="#">
-                  Movies
-                </a>
-              </li>
-              <li className="nav-item" href="#">
-                <a className="nav-link link-secondary">Recently Added</a>
-              </li>
-              <li className="nav-item" href="#">
-                <a className="nav-link link-secondary">My List</a>
-              </li>
-            </ul> */}
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0 ">
               <li className="nav-item">
                 <button
@@ -73,39 +51,39 @@ const Navigation = () => {
                   <i className={"bi " + (theme == "dark" ? "bi-moon-stars" : "bi-sun")}></i>
                 </button>
               </li>
-              <li className="nav-item">
-                <a className="nav-link link-secondary" href="#">
+              {/* <li className="nav-item">
+                <Link className="nav-link link-secondary" to="/">
                   <i className="bi bi-bell"></i>
-                </a>
-              </li>
+                </Link>
+              </li> */}
               <li className="nav-item dropdown">
-                <a
+                <Link
                   className="nav-link dropdown-toggle link-secondary pe-0"
-                  href="#"
+                  to="/"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <img className="img-fluid" src="assets/images/avatar.png" height="20px" width="20px" />
-                </a>
+                  <i class="bi bi-person-circle"></i>
+                </Link>
                 <ul className="dropdown-menu dropdown-menu-end ">
                   <li>
-                    <a className="dropdown-item" href="profile.html">
+                    <Link className="dropdown-item" to="/profile">
                       Profilo
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <a className="dropdown-item" href="settings.html">
-                      Impostazioni
-                    </a>
+                    <Link className="dropdown-item" to="/sensors">
+                      Sensori
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="settings.html">
+                    <Link className="dropdown-item" to="/users">
                       Utenti
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
