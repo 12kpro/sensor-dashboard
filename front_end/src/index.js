@@ -3,10 +3,19 @@ import ReactDOM from "react-dom/client";
 import "./scss/style.scss";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import App from "./App";
+import { Provider } from "react-redux";
+import { persistor, store } from "./redux";
+import { PersistGate } from "redux-persist/integration/react";
 //import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(
+  <Provider store={store}>
+    <PersistGate persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

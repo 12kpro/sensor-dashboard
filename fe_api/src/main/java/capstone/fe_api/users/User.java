@@ -33,7 +33,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
 
-    @JsonIgnore
     private Set<Role> roles = new LinkedHashSet<>();
 
     public User(String surname, String email, String name, String password, String username) {

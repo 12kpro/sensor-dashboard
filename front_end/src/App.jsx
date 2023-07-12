@@ -7,8 +7,27 @@ import Profile from "./components/profile/Profile";
 import Settings from "./components/sensors/Sensors";
 import Users from "./components/users/Users";
 import Sensors from "./components/sensors/Sensors";
-
+import Login from "./components/users/Login";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserData } from "./redux/action/auth";
+import { fetchSensors } from "./redux/action/sensors";
+import { fetchRoles } from "./redux/action/roles";
+import { fetchUm } from "./redux/action/um";
+import { fetchUsers } from "./redux/action/users";
 function App() {
+  const accessToken = useSelector((state) => state.auth.token);
+  //const userData = useSelector((state) => state.auth.userData);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(fetchUserData(accessToken));
+      dispatch(fetchSensors(accessToken));
+      dispatch(fetchRoles(accessToken));
+      dispatch(fetchUm(accessToken));
+      dispatch(fetchUsers(accessToken));
+    }
+  }, [accessToken]);
   // const socket = new WebSocket("ws://localhost:5080/sensorevent");
   // socket.addEventListener("open", function (event) {
   //   //console.log("WebSocket connection opened:", event);
@@ -33,9 +52,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/users" element={<Users />} />
           <Route path="/sensors" element={<Sensors />} />
-          {/*<Route path="/posts" element={<Posts />} />
-        <Route path="/jobs" element={<Jobs />} />
-        <Route path="/currentjob/:id" element={<Jobs />} /> */}
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </main>
     </BrowserRouter>

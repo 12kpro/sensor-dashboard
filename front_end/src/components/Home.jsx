@@ -1,9 +1,9 @@
+import { useSelector } from "react-redux";
+import Login from "./users/Login";
+import Dashboard from "./Dashboard";
+
 const Home = () => {
-  return (
-    <div className="row">
-      <div className="col-3"></div>
-      <div className="col"></div>
-    </div>
-  );
+  const accessToken = useSelector((state) => state.auth.token);
+  return <>{!accessToken ? <Login /> : <Dashboard />}</>;
 };
 export default Home;

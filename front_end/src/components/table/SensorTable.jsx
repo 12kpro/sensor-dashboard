@@ -1,9 +1,11 @@
+import { useSelector } from "react-redux";
 import Pager from "../pager/Pager";
 import EditSensor from "../sensors/EditSensor";
 import EditUm from "../sensors/EditUm";
 import SensorRow from "./rows/SensorRow";
 
 const SensorTable = ({ edit }) => {
+  const loadedSensor = useSelector((state) => state.sensors.available.sensors);
   return (
     <div className="card flex-fill">
       <div className="card-header  d-flex justify-content-between align-items-center">
@@ -50,14 +52,18 @@ const SensorTable = ({ edit }) => {
           </tr>
         </thead>
         <tbody>
-          {[...Array(10)].map((_, i) => (
-            <SensorRow key={i} edit={edit} />
-          ))}
+          {loadedSensor.content &&
+            loadedSensor.content
+              .filter((sensor) => sensor.visible)
+              .map((sensor) => <SensorRow key={sensor.id} edit={edit} sensor={sensor} />)}
         </tbody>
       </table>
-      <div className="card-footer text-body-secondary">
-        <Pager />
-      </div>
+      {loadedSensor.totalPages > 1 && (
+        <div className="card-footer text-body-secondary">
+          <Pager />
+        </div>
+      )}
+
       <EditSensor />
       <EditUm />
     </div>

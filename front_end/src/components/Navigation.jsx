@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { signOut } from "../redux/action/auth";
 
 const Navigation = () => {
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useState(defaultDark);
+  const accessToken = useSelector((state) => state.auth.token);
+  const userData = useSelector((state) => state.auth.userData);
+
+  const dispatch = useDispatch();
 
   const switchTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -56,37 +62,49 @@ const Navigation = () => {
                   <i className="bi bi-bell"></i>
                 </Link>
               </li> */}
-              <li className="nav-item dropdown">
-                <Link
-                  className="nav-link dropdown-toggle link-secondary pe-0"
-                  to="/"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-person-circle"></i>
-                </Link>
-                <ul className="dropdown-menu dropdown-menu-end ">
-                  <li>
-                    <Link className="dropdown-item" to="/profile">
-                      Profilo
-                    </Link>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/sensors">
-                      Sensori
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/users">
-                      Utenti
-                    </Link>
-                  </li>
-                </ul>
-              </li>
+              {accessToken && (
+                <li className="nav-item dropdown">
+                  <Link
+                    className="nav-link dropdown-toggle link-secondary pe-0"
+                    to="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i className="bi bi-person-circle"></i>
+                  </Link>
+                  <ul className="dropdown-menu dropdown-menu-end ">
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        Profilo
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/" onClick={() => dispatch(signOut())}>
+                        Esci
+                      </Link>
+                    </li>
+
+                    {userData && userData.roles.find((r) => r.name === "ADMIN") && (
+                      <>
+                        <li>
+                          <hr className="dropdown-divider" />
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/sensors">
+                            Sensori
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/users">
+                            Utenti
+                          </Link>
+                        </li>
+                      </>
+                    )}
+                  </ul>
+                </li>
+              )}
             </ul>
           </div>
         </div>
