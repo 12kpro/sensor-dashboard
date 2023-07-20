@@ -5,6 +5,7 @@ const initialState = {
   token: null,
   loading: false,
   userData: null,
+  loginError: "",
   bookmarks: []
 };
 
@@ -28,16 +29,20 @@ export const authSlice = createSlice({
         state.loading = false;
         state.userData = null;
         state.token = null;
+        state.loginError = "";
       })
       .addCase(login.pending, (state, action) => {
         state.loading = true;
+        state.loginError = "";
       })
       .addCase(login.fulfilled, (state, action) => {
         const { accessToken } = action.payload;
         state.token = accessToken;
+        state.loginError = "";
         state.loading = false;
       })
       .addCase(login.rejected, (state, action) => {
+        state.loginError = action.payload.message;
         state.loading = false;
       })
       .addCase(fetchUserData.pending, (state, action) => {

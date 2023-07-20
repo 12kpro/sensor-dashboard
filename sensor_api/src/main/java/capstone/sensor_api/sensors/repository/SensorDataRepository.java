@@ -15,6 +15,10 @@ import java.util.UUID;
 public interface SensorDataRepository extends JpaRepository<SensorData, UUID> {
     List<SensorData> findBySensor_Id(UUID id);
 
-    List<SensorData> findBySensor_IdAndTimeGreaterThan(UUID id, LocalDateTime time);
+    List<SensorData> findBySensor_IdAndTimeLessThanAndTimeGreaterThanEqual(UUID id, LocalDateTime timeEnd, LocalDateTime timeStart);
+
+    List<SensorData> findBySensor_IdAndTimeGreaterThanEqualAndTimeLessThan(UUID id, LocalDateTime timeStart, LocalDateTime timeEnd);
+
+    List<SensorData> findBySensor_IdAndTimeBetween(UUID id, LocalDateTime timeStart, LocalDateTime timeEnd);
 
 }

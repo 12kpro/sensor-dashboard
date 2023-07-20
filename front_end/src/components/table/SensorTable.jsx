@@ -1,11 +1,25 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Pager from "../pager/Pager";
 import EditSensor from "../sensors/EditSensor";
 import EditUm from "../sensors/EditUm";
 import SensorRow from "./rows/SensorRow";
+import { useEffect, useState } from "react";
+import { removeSensorFromBookmark } from "../../redux/slices/auth";
 
 const SensorTable = ({ edit }) => {
-  const loadedSensor = useSelector((state) => state.sensors.available.sensors);
+  const dispatch = useDispatch();
+  const loadedSensor = useSelector((state) => state.sensors.available);
+  const bookMarkedSensors = useSelector((state) => state.auth.bookmarks);
+  const [sensor, setSensor] = useState(null);
+
+  useEffect(() => {
+    for (const bookmark of bookMarkedSensors) {
+      if (!loadedSensor.content.find((sensor) => sensor.id !== bookmark)) {
+        dispatch(removeSensorFromBookmark(bookmark));
+      }
+    }
+  }, [loadedSensor]);
+
   return (
     <div className="card flex-fill">
       <div className="card-header  d-flex justify-content-between align-items-center">
@@ -20,6 +34,7 @@ const SensorTable = ({ edit }) => {
               aria-label="Toggle theme (auto)"
               data-bs-toggle="modal"
               data-bs-target="#SensorEditForm"
+              onClick={() => setSensor(null)}
             >
               <i className="bi bi-node-plus"></i>
             </button>
@@ -37,34 +52,40 @@ const SensorTable = ({ edit }) => {
           </div>
         )}
       </div>
-      <table className="table table-hover my-0 text-center">
+      <table className="table table-hover my-0 text-center table-striped">
         <thead>
           <tr>
             <th>Nome</th>
             <th className="d-none d-xl-table-cell">Latitudione</th>
             <th className="d-none d-xl-table-cell">Longitudine</th>
-            <th className="d-none d-md-table-cell">Unità</th>
-            <th>Soglia</th>
+            <th className="d-none d-sm-table-cell ">Unità</th>
+            <th className="d-none d-sm-table-cell ">Allarme</th>
             <th className="d-none d-md-table-cell">Massimo</th>
             <th className="d-none d-md-table-cell">Minimo</th>
             {edit && <th className="d-none d-md-table-cell">Visibile</th>}
-            <th className="d-none d-md-table-cell">Azioni</th>
+            <th>Azioni</th>
           </tr>
         </thead>
         <tbody>
-          {loadedSensor.content &&
-            loadedSensor.content
-              .filter((sensor) => sensor.visible)
-              .map((sensor) => <SensorRow key={sensor.id} edit={edit} sensor={sensor} />)}
+          {console.log(loadedSensor)}
+          {loadedSensor && edit
+            ? loadedSensor.content.length > 0 &&
+              loadedSensor.content.map((sensor) => (
+                <SensorRow key={sensor.id} edit={edit} sensor={sensor} setSensor={setSensor} />
+              ))
+            : loadedSensor.content.length > 0 &&
+              loadedSensor.content
+                .filter((sensor) => sensor.visible)
+                .map((sensor) => <SensorRow key={sensor.id} edit={edit} sensor={sensor} setSensor={setSensor} />)}
         </tbody>
       </table>
-      {loadedSensor.totalPages > 1 && (
+      {loadedSensor && loadedSensor.totalPages > 1 && (
         <div className="card-footer text-body-secondary">
           <Pager />
         </div>
       )}
 
-      <EditSensor />
+      <EditSensor sensor={sensor} />
       <EditUm />
     </div>
   );

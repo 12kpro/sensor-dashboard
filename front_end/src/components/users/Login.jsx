@@ -1,17 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/action/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const { token, loading } = useSelector((state) => state.auth);
+  const { token, loading, loginError } = useSelector((state) => state.auth);
 
   const handleLogin = (e) => {
     e.preventDefault();
     dispatch(login({ username, password }));
   };
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token]);
 
   return (
     <div className="row vh-100">
@@ -50,8 +57,10 @@ const Login = () => {
                   </div>
                   <div className="d-grid gap-2 mt-3">
                     {loading ? (
-                      <div className="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                      <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
                       </div>
                     ) : (
                       <button type="submit" name="Login">
@@ -59,6 +68,11 @@ const Login = () => {
                       </button>
                     )}
                   </div>
+                  {loginError && (
+                    <div class="alert alert-danger" role="alert">
+                      {loginError}
+                    </div>
+                  )}
                 </form>
               </div>
             </div>

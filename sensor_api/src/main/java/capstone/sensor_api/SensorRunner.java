@@ -86,12 +86,13 @@ public class SensorRunner implements CommandLineRunner {
             Runnable task = () -> {
                 List<Sensor> observedSensor = process.getSensors();
 
-//                for (Sensor s : observedSensor) {
-//                    log.info(s.toString());
-//                }
                 Random rand = new Random();
-                Sensor s = observedSensor.get(rand.nextInt(observedSensor.size()));   //savedSensor.get(rand.nextInt(savedSensor.size()));
-                s.setCurrentValue(s.getRangeMin() + (s.getRangeMax() - s.getRangeMin()) * rand.nextDouble());
+                
+                Sensor s = observedSensor.get(rand.nextInt(observedSensor.size()));
+                double rangeMin = s.getRangeMin() * 1.1;
+                double rangeMax = s.getRangeMax() * 1.1;
+                
+                s.setCurrentValue(rangeMin + (rangeMax - rangeMin) * rand.nextDouble());
             };
 
             executor.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);

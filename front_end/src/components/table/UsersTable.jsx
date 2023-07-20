@@ -1,9 +1,13 @@
+import { useSelector } from "react-redux";
 import Pager from "../pager/Pager";
-import EditRole from "../users/EditRole";
 import EditUser from "../users/EditUser";
 import UserRow from "./rows/UserRow";
+import { useState } from "react";
 
 const UsersTable = ({ edit }) => {
+  const users = useSelector((state) => state.users.available);
+  const authUser = useSelector((state) => state.auth.userData);
+  const [user, setUser] = useState(null);
   return (
     <div className="card flex-fill">
       <div className="card-header  d-flex justify-content-between align-items-center">
@@ -12,16 +16,17 @@ const UsersTable = ({ edit }) => {
           <div className="btn-group" role="group" aria-label="Basic example">
             <button
               class="btn"
-              id="bd-theme"
+              id="createUser"
               type="button"
               aria-expanded="true"
               aria-label="Toggle theme (auto)"
               data-bs-toggle="modal"
               data-bs-target="#UserEditForm"
+              onClick={() => setUser(null)}
             >
               <i class="bi bi-person-add"></i>
             </button>
-            <button
+            {/* <button
               className="btn"
               id="bd-theme"
               type="button"
@@ -30,8 +35,8 @@ const UsersTable = ({ edit }) => {
               data-bs-toggle="modal"
               data-bs-target="#editRole"
             >
-              <i className="bi bi-gear"></i>
-            </button>
+              <i className="bi bi-people"></i>
+            </button> */}
           </div>
         )}
       </div>
@@ -39,24 +44,26 @@ const UsersTable = ({ edit }) => {
         <thead>
           <tr>
             <th>Nome</th>
-            <th className="d-none d-xl-table-cell">Cognome</th>
-            <th className="d-none d-xl-table-cell">Username</th>
+            <th className="">Cognome</th>
+            <th className="d-none d-lg-table-cell">Username</th>
             <th className="d-none d-md-table-cell">E-mail</th>
-            <th>Ruolo</th>
-            <th className="d-none d-md-table-cell">Azioni</th>
+            <th className="d-none d-lg-table-cell">Ruolo</th>
+            <th>Azioni</th>
           </tr>
         </thead>
         <tbody>
-          {[...Array(10)].map((_, i) => (
-            <UserRow key={i} edit={edit} />
-          ))}
+          {users.content.length > 0 &&
+            users.content
+              .filter((user) => user.id !== authUser.id)
+              .map((user) => <UserRow key={user.id} user={user} setUser={setUser} />)}
         </tbody>
       </table>
-      <div class="card-footer text-body-secondary">
-        <Pager />
-      </div>
-      <EditUser />
-      <EditRole />
+      {users.totalPages > 1 && (
+        <div class="card-footer text-body-secondary">
+          <Pager />
+        </div>
+      )}
+      <EditUser user={user} />
     </div>
   );
 };

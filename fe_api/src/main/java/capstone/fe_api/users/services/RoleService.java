@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,15 +25,21 @@ public class RoleService {
         Role newRole = new Role(r.getName().toUpperCase());
         return roleRepository.save(newRole);
     }
-    public Page<Role> find(int page, int size, String sortBy) {
-        if (size < 0)
-            size = 10;
-        if (size > 100)
-            size = 100;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    // per i ruli paginati
+//    public Page<Role> find(int page, int size, String sortBy) {
+//        if (size < 0)
+//            size = 10;
+//        if (size > 100)
+//            size = 100;
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+//
+//        return roleRepository.findAll(pageable);
+//    }
 
-        return roleRepository.findAll(pageable);
+    public List<Role> find() {
+        return roleRepository.findAll();
     }
+
     public Role findById(UUID id) throws NotFoundException {
         return roleRepository.findById(id).orElseThrow(() -> new NotFoundException("Ruolo con Id:" + id + "non trovato!!"));
     }

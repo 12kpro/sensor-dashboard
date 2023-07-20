@@ -24,10 +24,6 @@ const CredentialUpdate = ({ user }) => {
       password
     };
     dispatch(updateUserCredential({ id, payload }));
-    // id
-    //   ? dispatch(updateUserData({ accessToken, id, payload }))
-    //   : dispatch(postUserPost(userData, id, JSON.stringify(formPost)));
-    console.log("crea/aggiorna utente");
   };
   return (
     <>
@@ -42,7 +38,7 @@ const CredentialUpdate = ({ user }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Crea/Modifica credenziali
+                Modifica credenziali
               </h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

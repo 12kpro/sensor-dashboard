@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, updateUser, deleteUser } from "../../redux/action/users";
 import { updateAuthUser, deleteAuthUser } from "../../redux/action/auth";
+import ConfirmModal from "../utils/ConfirmModal";
 
 const EditUser = ({ user, profile }) => {
   const roles = useSelector((state) => state.roles.available);
+  const authUser = useSelector((state) => state.auth.userData);
   const dispatch = useDispatch();
 
   const [id, setId] = useState(null);
@@ -14,33 +16,28 @@ const EditUser = ({ user, profile }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [roleId, setRoleId] = useState("");
-  const [save, setSave] = useState(false);
+  const [action, setAction] = useState("create");
 
   useEffect(() => {
-    if (user) {
-      setId(user.id);
-      setName(user.name);
-      setSurname(user.surname);
-      //setUsername(user.username);
-      setEmail(user.email);
-      setRoleId(user.roles[0].id);
-      setSave(true);
-    }
+    setId(user ? user.id : "");
+    setName(user ? user.name : "");
+    setSurname(user ? user.surname : "");
+    setUsername(user ? user.username : "");
+    setEmail(user ? user.email : "");
+    setRoleId(user ? user.roles[0].id : "");
+    setAction(user ? "update" : "create");
   }, [user]);
 
   const handleDelete = () => {
-    id ? dispatch(deleteAuthUser({ id })) : dispatch(deleteUser({ id }));
-    //    dispatch(deleteUser({ id }));
+    id && profile ? dispatch(deleteAuthUser({ id })) : dispatch(deleteUser({ id }));
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const payload = id ? { name, surname, email, roleId } : { name, surname, username, email, password, roleId };
     if (profile) {
       dispatch(updateAuthUser({ id, payload }));
     } else {
-      id ? dispatch(updateUser({ id, payload })) : dispatch(createUser({ id, payload }));
+      id ? dispatch(updateUser({ id, payload })) : dispatch(createUser({ payload }));
     }
-    console.log("crea/aggiorna utente");
   };
   return (
     <>
@@ -55,13 +52,13 @@ const EditUser = ({ user, profile }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Crea/Modifica utente
+                {id ? "Modifica" : "Crea"} utente
               </h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <div className="container-fluid">
-                <form className="needs-validation" novalidate onSubmit={handleSubmit}>
+                <form className="needs-validation" novalidate>
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                       Nome
@@ -136,7 +133,7 @@ const EditUser = ({ user, profile }) => {
                       </div>
                     </>
                   )}
-                  {roles && user.roles.find((r) => r.name === "ADMIN") && (
+                  {roles && authUser.roles.find((r) => r.name === "ADMIN") && (
                     <div className="mb-3">
                       <label htmlFor="selectRole" className="form-label">
                         Imposta ruolo
@@ -147,8 +144,9 @@ const EditUser = ({ user, profile }) => {
                         value={roleId}
                         onChange={(e) => setRoleId(e.target.value)}
                       >
-                        {roles.content &&
-                          roles.content.map((role, i) => (
+                        <option>--Seleziona un ruolo --</option>
+                        {roles.length > 1 &&
+                          roles.map((role, i) => (
                             <option key={role.id} value={role.id}>
                               {role.name}
                             </option>
@@ -168,56 +166,37 @@ const EditUser = ({ user, profile }) => {
                 type="button"
                 className="btn btn-primary"
                 data-bs-toggle="modal"
-                data-bs-target="#confirmUserEdit"
-                onClick={() => setSave(true)}
+                data-bs-target="#confirmUserAction"
+                // onClick={() => setSave(true)}
               >
                 {id ? "Modifica" : "Salva"}
               </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#confirmUserEdit"
-                onClick={() => setSave(false)}
-              >
-                Elimina
-              </button>
+              {user && (
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmUserAction"
+                  onClick={() => setAction("delete")}
+                >
+                  Elimina
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div
-        className="modal fade"
-        id="confirmUserEdit"
-        tabIndex="-1"
-        aria-labelledby="confirmUserEdit"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="confirmPostModalLabel">
-                Conferma operazione
-              </h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">Il tuo utente verrà {save ? (id ? "Aggiornato" : "Salvata") : "Eliminata"}</div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Annulla
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-bs-dismiss="modal"
-                onClick={save ? handleSubmit : handleDelete}
-              >
-                Conferma
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ConfirmModal
+        id="confirmUserAction"
+        handleSubmit={handleSubmit}
+        handleDelete={handleDelete}
+        action={action}
+        actionTxt={{
+          update: "L'utente verrà Aggiornato",
+          create: "L'utente verrà Salvato",
+          delete: "L'utente verrà Cancellato"
+        }}
+      />
     </>
   );
 };

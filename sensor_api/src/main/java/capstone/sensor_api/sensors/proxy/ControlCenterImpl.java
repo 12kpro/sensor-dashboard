@@ -4,6 +4,7 @@ import capstone.sensor_api.sensors.dto.SensorDataResponseDto;
 import capstone.sensor_api.sensors.interfaces.ControlCenter;
 import capstone.sensor_api.utils.WsClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,7 @@ public class ControlCenterImpl implements ControlCenter {
         alarmSent = true;
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //TODO verificare e/o correggere il payload {"time":[2023,7,3,1,51,41,248857700],"value":20.07024906284523,"sensorId":"86407637-0d03-4594-9b5c-fa27ce357a69"}
-        // o qui o nella get del controller sensor data
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         if (wsClient.getClientSession().isOpen()) {
             try {
                 wsClient.getClientSession().sendMessage(new TextMessage(mapper.writeValueAsString(data)));

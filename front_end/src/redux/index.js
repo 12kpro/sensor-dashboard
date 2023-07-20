@@ -7,11 +7,13 @@ import sensors from "./slices/sensors";
 import roles from "./slices/roles";
 import um from "./slices/um";
 import users from "./slices/users";
+import sensorData from "./slices/sensorsData";
+import alerts from "./slices/alert";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"],
+  whitelist: ["auth", "alerts"],
   transforms: [
     encryptTransform({
       secretKey: process.env.REACT_APP_SECRET
@@ -24,7 +26,9 @@ const rootReducer = combineReducers({
   sensors,
   roles,
   um,
-  users
+  users,
+  sensorData,
+  alerts
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

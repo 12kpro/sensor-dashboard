@@ -19,8 +19,8 @@ public class SensorDataService {
         return sensorDataRepository.save(sd);
     }
 
-    public List<SensorData> findBySensor_IddAndTimeGreaterThan(UUID id, LocalDateTime data) {
-        return sensorDataRepository.findBySensor_IdAndTimeGreaterThan(id, data);
+    public List<SensorData> findBySensor_IdAndTimeLessThanAndTimeGreaterThanEqual(UUID id, LocalDateTime timeStart, LocalDateTime timeEnd) {
+        return sensorDataRepository.findBySensor_IdAndTimeLessThanAndTimeGreaterThanEqual(id, timeEnd,timeStart);
     }
     public List<SensorData> findBySensor_Id(UUID id) {
         return sensorDataRepository.findBySensor_Id(id);

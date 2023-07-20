@@ -1,33 +1,23 @@
-const UserRow = () => {
+const UserRow = ({ user, setUser }) => {
   return (
     <tr className="text-center">
-      <td>Mauro</td>
-      <td className="d-none d-xl-table-cell">Simoni</td>
-      <td className="d-none d-xl-table-cell">mauro</td>
-      <td className="d-none d-md-table-cell">test@test.it</td>
-      <td className="d-none d-md-table-cell">Admin</td>
-      <td className="d-none d-md-table-cell">
+      <td>{user.name}</td>
+      <td className="">{user.surname}</td>
+      <td className="d-none d-lg-table-cell">{user.username}</td>
+      <td className="d-none d-md-table-cell">{user.email}</td>
+      <td className="d-none d-lg-table-cell">{user.roles[0].name}</td>
+      <td>
         <button
           class="btn"
-          id="bd-tdeme"
+          id="editUser"
           type="button"
           aria-expanded="true"
           aria-label="Toggle tdeme (auto)"
           data-bs-toggle="modal"
           data-bs-target="#UserEditForm"
+          onClick={() => setUser(user)}
         >
           <i class="bi bi-pencil"></i>
-        </button>
-        <button
-          class="btn"
-          id="bd-tdeme"
-          type="button"
-          aria-expanded="true"
-          aria-label="Toggle tdeme (auto)"
-          data-bs-toggle="modal"
-          data-bs-target="#confirmUserEdit"
-        >
-          <i class="bi bi-trash3"></i>
         </button>
       </td>
     </tr>

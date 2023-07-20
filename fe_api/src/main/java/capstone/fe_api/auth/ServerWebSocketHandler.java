@@ -24,9 +24,9 @@ public class ServerWebSocketHandler extends TextWebSocketHandler implements SubP
         log.info("Server connection opened");
         sessions.add(session);
 
-        TextMessage message = new TextMessage("one-time message from server");
-        log.info("Server sends: {}", message);
-        session.sendMessage(message);
+//        TextMessage message = new TextMessage("one-time message from server");
+//        log.info("Server sends: {}", message);
+//        session.sendMessage(message);
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,15 +30,21 @@ public class UmService {
         newUm.setDescription(u.getDescription());
         return umRepository.save(newUm);
     }
-    public Page<Um> find(int page, int size, String sortBy) {
-        if (size < 0)
-            size = 10;
-        if (size > 100)
-            size = 100;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    //per la paginazione
+    // public Page<Um> find(int page, int size, String sortBy) {
+    //     if (size < 0)
+    //         size = 10;
+    //     if (size > 100)
+    //         size = 100;
+    //     Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 
-        return umRepository.findAll(pageable);
+    //     return umRepository.findAll(pageable);
+    // }
+
+    public List<Um> find() {
+        return umRepository.findAll();
     }
+
     public Um findById(UUID id) throws NotFoundException {
         return umRepository.findById(id).orElseThrow(() -> new NotFoundException("Um con Id:" + id + "non trovato!!"));
     }

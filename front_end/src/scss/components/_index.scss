@@ -1,3 +1,29 @@
 main {
-  padding-block-start: 56px;
+  margin-block-start: 5rem;
+}
+
+.card {
+  transition: all 0.5s ease;
+  &.dashboard-card {
+    .card-body {
+      height: 400px;
+    }
+    &.full-screen {
+      position: fixed;
+      top: 5rem;
+      left: 5rem;
+      right: 5rem;
+      z-index: 999;
+      .card-body {
+        height: calc(100vh - 12rem);
+      }
+    }
+  }
+}
+
+.ring {
+  animation: ring 4s 0.7s ease-in-out infinite;
+}
+.ping {
+  animation: ping 1.5s ease-in-out infinite both;
 }

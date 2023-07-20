@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-export const fetchRoles = createAsyncThunk("roles/fetchRoles", async (accessToken, { rejectWithValue }) => {
+export const fetchRoles = createAsyncThunk("roles/fetchRoles", async (_, { getState, rejectWithValue }) => {
   try {
-    api.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    const state = getState();
+    api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
     const response = await api.get("/roles");
-    return { ...response.data };
+    return response.data;
   } catch (e) {
     return rejectWithValue("");
   }

@@ -24,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 @Slf4j
@@ -62,10 +63,11 @@ public class SensorController {
         return restTemplate.getForEntity(serviceUrl + servicePath + "/" + id, Sensor.class);
     }
     @GetMapping("/{id}/data")
-    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "7" ) int interval ) throws Exception {
+    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "1" ) int interval, @RequestParam(defaultValue = "#{T(java.time.LocalDateTime).now()}" ) LocalDateTime date ) throws Exception {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(serviceUrl + servicePath + "/" + id  + "/data")
-                .queryParam("interval", interval);
+                .queryParam("interval", interval)
+                .queryParam("date", date);
         URI uri = uriBuilder.build().toUri();
         log.info(String.valueOf(uri));
         ParameterizedTypeReference<List<SensorDataResponseDto>> responseType = new ParameterizedTypeReference<List<SensorDataResponseDto>>() {};

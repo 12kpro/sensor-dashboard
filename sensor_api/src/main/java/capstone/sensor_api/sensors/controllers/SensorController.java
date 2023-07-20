@@ -43,9 +43,8 @@ public class SensorController {
         return sensorService.findById(id);
     }
     @GetMapping("/{id}/data")
-    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "7" ) int interval ) throws Exception {
-        LocalDateTime data = LocalDateTime.now();
-        List<SensorData> sd = sensorDataService.findBySensor_IddAndTimeGreaterThan(id,data.minusDays(interval));
+    public List<SensorDataResponseDto> getSensorData(@PathVariable UUID id, @RequestParam(defaultValue = "1" ) int interval , @RequestParam(defaultValue = "#{T(java.time.LocalDateTime).now()}" ) LocalDateTime date) throws Exception {
+        List<SensorData> sd = sensorDataService.findBySensor_IdAndTimeLessThanAndTimeGreaterThanEqual(id,date.minusHours(interval), date);
         return sensorDataMapper.toDTOs(sd);
     }
     @PostMapping("")

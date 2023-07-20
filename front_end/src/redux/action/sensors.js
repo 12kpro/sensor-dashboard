@@ -1,32 +1,51 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-// export const getSensor = (accessToken) => {
-//   return async (dispatch) => {
-//     try {
-//       api.defaults.headers.Authorization = `Bearer ${accessToken}`;
-//       const resp = await api.get("/sensor");
-
-//       if (resp.ok) {
-//         let { data } = await resp.json();
-//         dispatch({ type: JOB_SEARCH, payload: data });
-//       } else {
-//         console.log("error");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     } finally {
-//       console.log("fetch loading finish");
-//     }
-//   };
-// };
-export const fetchSensors = createAsyncThunk("sensors/fetchSensors", async (accessToken, { rejectWithValue }) => {
+export const fetchSensors = createAsyncThunk("sensor/fetchSensors", async (_, { getState, rejectWithValue }) => {
   try {
-    api.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    const state = getState();
+    api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
     const response = await api.get("/sensor");
-    console.log(response);
     return { ...response.data };
   } catch (e) {
-    return rejectWithValue("");
+    return rejectWithValue(e.response.data);
+  }
+});
+
+export const updateSensor = createAsyncThunk(
+  "sensor/updateSensor",
+  async ({ id, payload }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
+      const response = await api.put(`/sensor/${id}`, payload);
+      return { sensorData: { ...response.data } };
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  }
+);
+export const createSensor = createAsyncThunk(
+  "sensor/createSensor",
+  async ({ payload }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
+      const response = await api.post(`/sensor`, payload);
+      return { sensorData: { ...response.data } };
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  }
+);
+
+export const deleteSensor = createAsyncThunk("sensor/deleteSensor", async ({ id }, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
+    const response = await api.delete(`/sensor/${id}`);
+    return { id: id };
+  } catch (e) {
+    return rejectWithValue(e.response.data);
   }
 });

@@ -20,35 +20,31 @@ export const updateUser = createAsyncThunk(
       api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
       const response = await api.put(`/users/${id}`, payload);
       console.log(response);
-      return { user: { ...response.data } };
+      return { userData: { ...response.data } };
     } catch (e) {
       return rejectWithValue("");
     }
   }
 );
-export const createUser = createAsyncThunk(
-  "users/updateUserData",
-  async ({ id, payload }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
-      const response = await api.put(`/users/${id}`, payload);
-      console.log(response);
-      return { user: { ...response.data } };
-    } catch (e) {
-      return rejectWithValue("");
-    }
+export const createUser = createAsyncThunk("users/createUser", async ({ payload }, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
+    const response = await api.post(`/users`, payload);
+    console.log(response);
+    return { userData: { ...response.data } };
+  } catch (e) {
+    return rejectWithValue("");
   }
-);
+});
 
 export const deleteUser = createAsyncThunk("users/deleteUser", async ({ id }, { getState, rejectWithValue }) => {
   try {
     const state = getState();
     api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
-
     const response = await api.delete(`/users/${id}`);
     console.log(response);
-    return {};
+    return { id: id };
   } catch (e) {
     return rejectWithValue("");
   }

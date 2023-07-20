@@ -7,7 +7,6 @@ export const fetchUserData = createAsyncThunk("auth/fetchUserData", async (_, { 
     api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
     //api.defaults.headers.Authorization = `Bearer ${accessToken}`;
     const response = await api.get("/users/me");
-    console.log(response);
     return { user: { ...response.data }, accessToken: state.auth.token };
   } catch (e) {
     return rejectWithValue("");
@@ -20,7 +19,6 @@ export const updateUserCredential = createAsyncThunk(
       const state = getState();
       api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
       const response = await api.put(`/users/${id}/change`, payload);
-      console.log(response);
       return response.data;
     } catch (e) {
       return rejectWithValue("");
@@ -35,7 +33,6 @@ export const updateAuthUser = createAsyncThunk(
       const state = getState();
       api.defaults.headers.Authorization = `Bearer ${state.auth.token}`;
       const response = await api.put(`/users/${id}`, payload);
-      console.log(response);
       return { user: { ...response.data } };
     } catch (e) {
       return rejectWithValue("");
@@ -55,9 +52,13 @@ export const deleteAuthUser = createAsyncThunk("auth/deleteAuthUser", async ({ i
   }
 });
 
-export const login = createAsyncThunk("auth/login", async (payload) => {
-  const response = await api.post("/auth/login", payload);
-  return response.data;
+export const login = createAsyncThunk("auth/login", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await api.post("/auth/login", payload);
+    return response.data;
+  } catch (e) {
+    return rejectWithValue(e.response.data);
+  }
 });
 
 export const signOut = createAsyncThunk("auth/signOut", async () => {});

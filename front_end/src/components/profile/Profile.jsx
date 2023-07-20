@@ -27,7 +27,7 @@ const Profile = () => {
               </button>
               <button
                 className="btn"
-                id="bd-theme"
+                id="changeUserCredential"
                 type="button"
                 aria-expanded="true"
                 aria-label="Toggle theme (auto)"

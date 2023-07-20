@@ -1,4 +1,5 @@
 const Pager = () => {
+  //TODO: da implementare
   return (
     <nav aria-label="...">
       <ul className="pagination m-0 justify-content-center">
